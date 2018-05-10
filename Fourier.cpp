@@ -107,47 +107,39 @@ Complex IFFT::Compute(size_t init_pos,size_t step, size_t len, int k,const Array
 
 void DFT::Compute(ostream& os, istream& is){
     Array <Complex> X;
-    Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        Y=Compute(X);
-        os<<Y<<endl;
+        os<<Compute(X)<<endl;
     }
 }
 
 void IDFT::Compute(ostream& os, istream& is){
     Array <Complex> X;
-    Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        Y=Compute(X);
-        os<<Y<<endl;
+        os<<Compute(X)<<endl;
     }
 }
 
 void FFT::Compute(ostream& os, istream& is)
 {
     Array <Complex> X;
-    Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        Y=Compute(X);
-        os<<Y<<endl;
+        os<<Compute(X)<<endl;
     }
 }
 
 void IFFT::Compute(ostream& os, istream& is)
 {
     Array <Complex> X;
-    Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        Y=Compute(X);
-        os<<Y<<endl;
+        os<<Compute(X)<<endl;
     }
 }
 

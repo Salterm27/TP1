@@ -30,7 +30,7 @@ class  Array
     T & operator[](size_t const pos);
     Array<T> & operator=( const Array<T> &);
     template <class T1> friend istream& operator  >> (istream &, const Array <T1>&);
-    template <class T1> friend ostream& operator  << (ostream &, const Array <T1>&);
+    template <class T1> friend ostream& operator  << (ostream &, const Array <T1>);
     Array<T> & operator / (const double);
     //Functions
     size_t GetSize() const;
@@ -109,7 +109,7 @@ template <class T1> std::istream& operator  >> (std::istream& is, Array <T1>& X)
     return is;
 }
 
-template <class T1> std::ostream& operator  << (std::ostream& os, Array <T1> &X)
+template <class T1> std::ostream& operator  << (std::ostream& os, Array <T1> X)
 {
     size_t len=X.GetSize();
     for(size_t i=0; i<len; i++)
