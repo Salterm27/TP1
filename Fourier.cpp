@@ -1,4 +1,6 @@
+#include <ctime>
 #include <istream>
+#include <string.h>
 #include <string>
 #include <iomanip>
 #include <cstdlib>
@@ -9,13 +11,14 @@
 #include "Complex.h"
 #include "Array.h"
 #include "Fourier.h"
-#include <cmath>
-#define EMPTY "No Data"
+#include <math.h>
+
+
 using namespace std;
 
-Array <Complex> DFT (Array <Complex> const &vector){
+Array <Complex> DFT::Compute (const Array <Complex>& Vector){
     double arg;
-    size_t len=vector.GetSize();
+    size_t len=Vector.GetSize();
     Array <Complex> DFTarray(len);
     Complex aux;
 
@@ -24,16 +27,16 @@ Array <Complex> DFT (Array <Complex> const &vector){
             arg=(k*n*2*M_PI)/len;
             aux.SetRe(cos(arg));
             aux.SetIm(-sin(arg));
-            DFTarray[k]+=(vector[n]*aux);
+            DFTarray[k]+=(Vector[n]*aux);
         }
     }
 
     return DFTarray;
 }
 
-Array <Complex> IDFT (Array <Complex> const &vector){
+Array <Complex> IDFT::Compute (const Array <Complex>& Vector){
     double arg;
-    size_t len=vector.GetSize();
+    size_t len=Vector.GetSize();
     Array <Complex> IDFTarray(len);
     Complex aux;
     Complex len2(len);
@@ -42,44 +45,109 @@ Array <Complex> IDFT (Array <Complex> const &vector){
             arg=(k*n*2*M_PI)/len;
             aux.SetRe(cos(arg));
             aux.SetIm(sin(arg));
-            IDFTarray[n]+=(vector[k]*aux)/len;
+            IDFTarray[n]+=(Vector[k]*aux)/len;
         }
     }
     return IDFTarray;
 }
 
-void DFT(ostream& os, istream& is)
+Array<Complex> FFT::Compute(const Array <Complex>& Vector){
+    size_t size=Vector.GetSize();
+    Array <Complex>* FFTVector;
+    FFTVector=new Array<Complex>(size);
+
+    for(size_t i=0; i<size; i++)
+    {
+        (*FFTVector)[i]=Compute(0,1,size,i,Vector);
+    }
+
+    return *FFTVector;
+}
+
+
+Complex FFT::Compute(size_t init_pos,size_t step, size_t len, int k,const Array <Complex>& Vector)
 {
+    if(len==1)
+    {
+        return Vector[init_pos];
+    }
+
+    double arg=(2*M_PI*k)/len;
+    Complex aux(cos(arg),-sin(arg));
+
+    return Compute(init_pos,step*2,len/2,k,Vector) + (Compute(init_pos+step,step*2,len/2,k,Vector) * aux);
+}
+
+Array<Complex> IFFT::Compute(const Array <Complex>& Vector){
+    size_t size=Vector.GetSize();
+    Array <Complex>* FFTVector;
+    FFTVector=new Array<Complex>(size);
+
+    for(size_t i=0; i<size; i++)
+    {
+        (*FFTVector)[i]=Compute(0,1,size,i,Vector);
+    }
+    *FFTVector=(*FFTVector)/size;
+
+    return *FFTVector;
+}
+
+
+Complex IFFT::Compute(size_t init_pos,size_t step, size_t len, int k,const Array <Complex>& Vector){
+    if(len==1)
+    {
+        return Vector[init_pos];
+    }
+
+    double arg=(2*M_PI*k)/len;
+    Complex aux(cos(arg),sin(arg));
+
+    return Compute(init_pos,step*2,len/2,k,Vector) + (Compute(init_pos+step,step*2,len/2,k,Vector) * aux);
+}
+
+void DFT::Compute(ostream& os, istream& is){
     Array <Complex> X;
     Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        if(X.GetSize()== 0){
-            os<<EMPTY<<endl;
-        }
-        else{
-            Y=DFT(X);
-            os<<Y<<endl;    
-        }
+        Y=Compute(X);
+        os<<Y<<endl;
     }
 }
 
-void IDFT(ostream& os, istream& is)
+void IDFT::Compute(ostream& os, istream& is){
+    Array <Complex> X;
+    Array <Complex> Y;
+
+    while(!is.eof()){
+        is>>X;
+        Y=Compute(X);
+        os<<Y<<endl;
+    }
+}
+
+void FFT::Compute(ostream& os, istream& is)
 {
     Array <Complex> X;
     Array <Complex> Y;
 
     while(!is.eof()){
         is>>X;
-        if(X.GetSize()==0){
-            os<<EMPTY<<endl;
-        }else{
-            Y=IDFT(X);
-            os<<Y<<endl;   
-        }
+        Y=Compute(X);
+        os<<Y<<endl;
     }
-    X.Resize(0);
-    Y.Resize(0);
+}
+
+void IFFT::Compute(ostream& os, istream& is)
+{
+    Array <Complex> X;
+    Array <Complex> Y;
+
+    while(!is.eof()){
+        is>>X;
+        Y=Compute(X);
+        os<<Y<<endl;
+    }
 }
 

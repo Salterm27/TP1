@@ -16,10 +16,51 @@ using namespace std;
 #include "Array.h"
 #include <math.h>
 
-Array <Complex> DFT (Array <Complex> const &vector);
-Array <Complex> IDFT (Array <Complex> const &vector);
-void DFT(ostream& os, istream& is);
-void IDFT(ostream& os, istream& is);
+
+class Fourier
+{
+    public:
+        virtual void Compute(ostream& os, istream& is)=0;
+        virtual Array<Complex> Compute(const Array<Complex> &)=0;
+        virtual ~Fourier(){};
+};
+
+class FFT : public Fourier
+{
+    Complex Compute(size_t,size_t,size_t,int,const Array<Complex>&);
+
+    public:
+        virtual Array<Complex> Compute(const Array<Complex>&);
+        virtual void Compute(ostream& os, istream& is);
+        ~FFT(){};
+};
+
+class IFFT : public Fourier
+{
+    Complex Compute(size_t,size_t,size_t,int,const Array <Complex>&);
+
+    public:
+        virtual Array<Complex> Compute(const Array <Complex>& Vector);
+        virtual void Compute(ostream& os, istream& is);
+        ~IFFT(){};
+};
+
+class DFT : public Fourier
+{
+    public:
+    	virtual Array<Complex> Compute(const Array <Complex>& Vector);
+        virtual void Compute(ostream& os, istream &is);
+        ~DFT(){};
+};
+
+class IDFT : public Fourier
+{
+    public:
+        virtual Array<Complex> Compute(const Array <Complex>& Vector);
+        virtual void Compute(ostream& os, istream &is);
+        ~IDFT(){};
+};
+
 
 
 #endif
