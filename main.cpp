@@ -100,25 +100,21 @@ int main(int argc, char* const argv[])
 
     Fourier* T;
 	if(method==1){
-        cout<<"DFT true"<<endl;
 		T=new DFT;
         T->Compute(*oss,*iss);
     }
 	else{
 		if(method==2){
-            cout<<"IDFT true"<<endl;
 			T=new IDFT;
             T->Compute(*oss,*iss);
         }
 		else{
 			if(method==3){
-                cout<<"FFT true"<<endl;
 				T=new FFT;
                 T->Compute(*oss,*iss);
             }
 			else{
 				if(method==4){
-                    cout<<"IFFT true"<<endl;
 					T=new IFFT;
                     T->Compute(*oss,*iss);
                 }
