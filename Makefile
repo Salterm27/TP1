@@ -1,4 +1,4 @@
-#T.P. 0 - Programacion C++
+#T.P. 1 - Programacion C++
 
 #Universidad de Buenos Aires
 #Facultad de Ingenieria
@@ -11,17 +11,14 @@
 CC = g++ -Wall -Wextra -g
 
 
-all: TP0 clean
+all: TP1 clean
 
 
-TP0: main.o Cmdline.o Complex.o Fourier.o Array.h
-	$(CC) -o TP0 main.o Complex.o Fourier.o Cmdline.o
+TP1: main.o Cmdline.o Complex.o Fourier.o Array.h
+	$(CC) -o TP1 main.o Complex.o Fourier.o Cmdline.o
 
 main.o: main.cpp Complex.h Array.h Fourier.h Cmdline.h
 	$(CC) -o main.o -c main.cpp
-
-#Array.o: Array.cpp Array.h Complex.h
-	#$(CC) -o Array.o
 
 Complex.o: Complex.cpp Complex.h 
 	$(CC) -o Complex.o -c Complex.cpp
