@@ -21,8 +21,7 @@ class  Array
 
     public:
     //Constructors
-    Array(size_t s);
-    Array();
+    Array(size_t s=DEFAULT_SIZE);
     Array(const Array <T> &);
     //Destructor
     ~Array();
@@ -31,7 +30,8 @@ class  Array
     T & operator[](size_t const pos);
     Array<T> & operator=( const Array<T> &);
     template <class T1> friend istream& operator  >> (istream &, const Array <T1>&);
-    template <class T1> friend ostream& operator  << (ostream &, const Array <T1> &);
+    template <class T1> friend ostream& operator  << (ostream &, const Array <T1>&);
+    Array<T> & operator / (const double);
     //Functions
     size_t GetSize() const;
     void Reset();
@@ -39,11 +39,6 @@ class  Array
 };
 
 //CONSTRUCTORS
-
-template <class T> Array <T>::Array(){
-    size=DEFAULT_SIZE;
-    data=new T[DEFAULT_SIZE];
-}
 
 template <class T> Array <T>::Array(size_t s){
     size=s;
@@ -68,11 +63,11 @@ template <class T> Array <T>::~Array()
 
 template <class T> T & Array <T>::operator[](size_t const pos){
     if(pos>=size){
-      if (size==0){ 
+      if (size==0){
             Resize (1);
         }else {
             Resize(2*size);
-        }  
+        }
     }
     return data[pos];
 }
@@ -97,6 +92,7 @@ template <class T> Array<T> & Array<T>::operator=( const Array<T> &c ){
 
 template <class T1> std::istream& operator  >> (std::istream& is, Array <T1>& X)
 {
+    //Tirar excepcion en caso de error
     string line;
     getline(is, line);
     stringstream lstream(line);
@@ -113,13 +109,25 @@ template <class T1> std::istream& operator  >> (std::istream& is, Array <T1>& X)
     return is;
 }
 
-template <class T1> std::ostream& operator  << (std::ostream & os, Array <T1> &X)
+template <class T1> std::ostream& operator  << (std::ostream& os, Array <T1> &X)
 {
     size_t len=X.GetSize();
     for(size_t i=0; i<len; i++)
         os<<X[i];
 
     return os;
+}
+
+template <class T> Array<T> & Array<T>::operator / (const double b)
+{
+    T* aux=new T[size];
+    for(size_t i=0;i<size;i++)
+    {
+       aux[i]=(*this)[i]/b;
+    }
+    delete []data;
+    data=aux;
+    return *this;
 }
 
 
